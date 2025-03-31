@@ -1,6 +1,6 @@
 // We'll use The Movie Database (TMDB) API
-const API_KEY = 'YOUR_TMDB_API_KEY'; // Replace with your actual API key
-const BASE_URL = 'https://api.themoviedb.org/3';
+const API_KEY = '31cc369f7eca8654b673e36549a7d253'; // Replace with your actual API key
+const BASE_URL = `https://api.themoviedb.org/3`;
 
 // Helper function to make API requests
 const fetchFromApi = async (endpoint, params = {}) => {
