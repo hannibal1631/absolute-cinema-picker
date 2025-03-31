@@ -1,6 +1,7 @@
 // We'll use The Movie Database (TMDB) API
-const API_KEY = '31cc369f7eca8654b673e36549a7d253'; // Replace with your actual API key
-const BASE_URL = `https://api.themoviedb.org/3`;
+
+const API_KEY = import.meta.env.VITE_API_KEY;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Helper function to make API requests
 const fetchFromApi = async (endpoint, params = {}) => {
