@@ -1,32 +1,70 @@
-// We'll use The Movie Database (TMDB) API
-
-const API_KEY = import.meta.env.VITE_API_KEY;
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+// We are using The Movie Database (TMDB) API
+const BASE_URL = `https://api.themoviedb.org/3`;
+const API_KEY = '31cc369f7eca8654b673e36549a7d253';
 
 // Helper function to make API requests
 const fetchFromApi = async (endpoint, params = {}) => {
-  const url = new URL(`${BASE_URL}${endpoint}`);
+  try {
+    // Check if BASE_URL is defined and properly formatted
+    if (!BASE_URL) {
+      throw new Error(
+        'BASE_URL is undefined. Check your environment variables.'
+      );
+    }
 
-  // Add API key to all requests
-  url.searchParams.append('api_key', API_KEY);
+    // Ensure endpoint starts with a slash if not already present
+    const formattedEndpoint = endpoint.startsWith('/')
+      ? endpoint
+      : `/${endpoint}`;
 
-  // Add additional params
-  Object.entries(params).forEach(([key, value]) => {
-    if (value) url.searchParams.append(key, value);
-  });
+    // Create URL with proper error checking
+    let url;
+    try {
+      url = new URL(`${BASE_URL}${formattedEndpoint}`);
+    } catch (urlError) {
+      console.error('Invalid URL construction:', BASE_URL, formattedEndpoint);
+      throw new Error(
+        `Failed to construct URL: ${BASE_URL}${formattedEndpoint}`
+      );
+    }
 
-  const response = await fetch(url);
+    // Add API key to all requests
+    if (!API_KEY) {
+      throw new Error(
+        'API_KEY is undefined. Check your environment variables.'
+      );
+    }
+    url.searchParams.append('api_key', API_KEY);
 
-  if (!response.ok) {
-    throw new Error(`API error: ${response.status}`);
+    // Add additional params
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null)
+        url.searchParams.append(key, value);
+    });
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error(`Error fetching from ${endpoint}:`, error);
+    throw error;
   }
-
-  return response.json();
 };
 
 // Get details for a specific movie including genres
 const getMovieDetails = async (movieId) => {
-  return fetchFromApi(`/movie/${movieId}`, { append_to_response: 'credits' });
+  try {
+    return await fetchFromApi(`/movie/${movieId}`, {
+      append_to_response: 'credits',
+    });
+  } catch (error) {
+    console.error(`Error getting details for movie ${movieId}:`, error);
+    throw error;
+  }
 };
 
 // Get a random movie
@@ -48,7 +86,7 @@ export const getRandomMovie = async () => {
     const randomMovie = popularMovies.results[randomIndex];
 
     // Get full details for the selected movie
-    return getMovieDetails(randomMovie.id);
+    return await getMovieDetails(randomMovie.id);
   } catch (error) {
     console.error('Error fetching random movie:', error);
     throw error;
@@ -71,32 +109,39 @@ export const filterMovies = async (filters) => {
 
     // Add year range if specified
     if (filters.year) {
-      if (!isNaN(parseInt(filters.year))) {
-        // Specific year
-        params.primary_release_year = filters.year;
-      } else {
-        // Decade or range
-        switch (filters.year) {
-          case '2010s':
-            params.primary_release_date_gte = '2010-01-01';
-            params.primary_release_date_lte = '2019-12-31';
-            break;
-          case '2000s':
-            params.primary_release_date_gte = '2000-01-01';
-            params.primary_release_date_lte = '2009-12-31';
-            break;
-          case '1990s':
-            params.primary_release_date_gte = '1990-01-01';
-            params.primary_release_date_lte = '1999-12-31';
-            break;
-          case '1980s':
-            params.primary_release_date_gte = '1980-01-01';
-            params.primary_release_date_lte = '1989-12-31';
-            break;
-          case 'older':
-            params.primary_release_date_lte = '1979-12-31';
-            break;
+      try {
+        if (!isNaN(parseInt(filters.year))) {
+          // Specific year
+          params.primary_release_year = filters.year;
+        } else {
+          // Decade or range
+          switch (filters.year) {
+            case '2010s':
+              params.primary_release_date_gte = '2010-01-01';
+              params.primary_release_date_lte = '2019-12-31';
+              break;
+            case '2000s':
+              params.primary_release_date_gte = '2000-01-01';
+              params.primary_release_date_lte = '2009-12-31';
+              break;
+            case '1990s':
+              params.primary_release_date_gte = '1990-01-01';
+              params.primary_release_date_lte = '1999-12-31';
+              break;
+            case '1980s':
+              params.primary_release_date_gte = '1980-01-01';
+              params.primary_release_date_lte = '1989-12-31';
+              break;
+            case 'older':
+              params.primary_release_date_lte = '1979-12-31';
+              break;
+            default:
+              console.warn(`Unrecognized year filter: ${filters.year}`);
+          }
         }
+      } catch (yearError) {
+        console.error('Error processing year filter:', yearError);
+        // Continue without the year filter
       }
     }
 
@@ -109,8 +154,11 @@ export const filterMovies = async (filters) => {
     const filteredMovies = await fetchFromApi('/discover/movie', params);
 
     if (!filteredMovies.results || filteredMovies.results.length === 0) {
+      console.warn(
+        'No movies matched filters, falling back to random popular movie'
+      );
       // If no movies match, fall back to a random popular movie
-      return getRandomMovie();
+      return await getRandomMovie();
     }
 
     // Select a random movie from the filtered results
@@ -120,7 +168,7 @@ export const filterMovies = async (filters) => {
     const selectedMovie = filteredMovies.results[randomIndex];
 
     // Get full details for the selected movie
-    return getMovieDetails(selectedMovie.id);
+    return await getMovieDetails(selectedMovie.id);
   } catch (error) {
     console.error('Error filtering movies:', error);
     throw error;
