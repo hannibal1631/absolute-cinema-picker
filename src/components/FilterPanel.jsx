@@ -1,4 +1,3 @@
-// src/components/FilterPanel.jsx
 import { useState } from 'react';
 
 function FilterPanel({ onSubmit, onRandom, loading }) {

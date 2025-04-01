@@ -43,9 +43,9 @@ function App() {
   return (
     <div className='min-h-screen flex flex-col'>
       <Header />
-      <main className='flex-grow container mx-auto px-4 py-8'>
+      <main className='flex-grow px-4 py-8'>
         <div className='grid md:grid-cols-2 gap-8'>
-          <div>
+          <div className='max-w-md w-full flex flex-col mx-auto'>
             <h2 className='text-2xl font-bold mb-6 text-purple-400'>
               Find Your Next Movie
             </h2>

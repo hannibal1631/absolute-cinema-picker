@@ -1,6 +1,8 @@
+import conf from '../conf/conf';
+
 // We are using The Movie Database (TMDB) API
-const BASE_URL = `https://api.themoviedb.org/3`;
-const API_KEY = '31cc369f7eca8654b673e36549a7d253';
+const BASE_URL = conf.baseUrl;
+const API_KEY = conf.apiKey;
 
 // Helper function to make API requests
 const fetchFromApi = async (endpoint, params = {}) => {

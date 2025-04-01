@@ -15,7 +15,7 @@ function Header() {
               clipRule='evenodd'
             />
           </svg>
-          <h1 className='text-xl font-bold'>MovieMatcher</h1>
+          <h1 className='text-xl font-bold'>Pick Your Absolute Cinema</h1>
         </div>
         <nav>
           <ul className='flex space-x-6'>
@@ -31,7 +31,7 @@ function Header() {
             </li>
             <li>
               <a href='#' className='hover:text-purple-400 transition-colors'>
-                About
+                TV Shows
               </a>
             </li>
           </ul>

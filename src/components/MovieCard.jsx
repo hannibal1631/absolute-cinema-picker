@@ -10,17 +10,16 @@ function MovieCard({ movie }) {
     : 'Unknown';
 
   return (
-    <div className='bg-gray-800 rounded-lg overflow-hidden shadow-lg max-w-md w-full hover:shadow-purple-900/30 hover:shadow-xl transition-shadow'>
+    <div className='flex flex-col bg-gray-800 rounded-lg overflow-hidden shadow-lg max-w-md w-full md:w-2xl hover:shadow-purple-900/30 hover:shadow-xl transition-shadow'>
+      {/* image div here */}
       <div className='relative'>
-        <img
-          src={posterUrl}
-          alt={movie.title}
-          className='w-full h-64'
-        />
+        <img src={posterUrl} alt={movie.title} className='w-full h-full' />
         <div className='absolute top-2 right-2 bg-purple-600 text-white text-sm font-bold px-2 py-1 rounded'>
           {movie.vote_average ? movie.vote_average.toFixed(1) : '?'}/10
         </div>
       </div>
+
+      {/* movie details here */}
       <div className='p-6'>
         <h3 className='text-xl font-bold mb-2'>
           {movie.title} ({year})
