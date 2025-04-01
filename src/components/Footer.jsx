@@ -11,7 +11,8 @@ function Footer() {
           </div>
           <div className='flex space-x-4'>
             <a
-              href='#'
+              href='https://x.com/'
+              target='blank'
               className='text-gray-400 hover:text-purple-400 transition-colors'
             >
               <svg className='h-6 w-6' fill='currentColor' viewBox='0 0 24 24'>
@@ -19,7 +20,8 @@ function Footer() {
               </svg>
             </a>
             <a
-              href='#'
+              href='https://www.instagram.com/'
+              target='blank'
               className='text-gray-400 hover:text-purple-400 transition-colors'
             >
               <svg className='h-6 w-6' fill='currentColor' viewBox='0 0 24 24'>
@@ -27,7 +29,8 @@ function Footer() {
               </svg>
             </a>
             <a
-              href='#'
+              href='https://github.com/hannibal1631/absolute-cinema-picker'
+              target='blank'
               className='text-gray-400 hover:text-purple-400 transition-colors'
             >
               <svg className='h-6 w-6' fill='currentColor' viewBox='0 0 24 24'>
