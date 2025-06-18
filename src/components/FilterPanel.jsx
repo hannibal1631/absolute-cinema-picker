@@ -69,6 +69,7 @@ function FilterPanel({ onSubmit, onRandom, loading }) {
             className='w-full bg-gray-700 text-white rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-500'
           >
             <option value=''>Any Year</option>
+            <option value='2025'>2025</option>
             <option value='2024'>2024</option>
             <option value='2023'>2023</option>
             <option value='2022'>2022</option>
